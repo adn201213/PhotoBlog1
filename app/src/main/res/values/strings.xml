@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">PhotoBlog</string>
+    <string name="password_hint">Password</string>
+    <string name="Email_hint">Your Email</string>
+    <string name="Login_logo_Desc">Logo</string>
+    <string name="login_btn_text">Login To Account</string>
+    <string name="login_reg_btn_text">Register A new Account</string>
+    <string name="action_search_text">Search</string>
+    <string name="action_setting_text">Account Setting</string>
+    <string name="action_logout_text">Logout</string>
+    <string name="reg_login_text">Already Have An Account</string>
+    <string name="reg_button_account">Create a New Account</string>
+    <string name="reg_confirm_password">Confirm Password</string>
+    <string name="saveAccountSetting_btn_saveSetting">Save Account Setting</string>
+    <string name="setupAccountSetting_et_hint">Your Name</string>
+    <string name="newPostActivity_addNewPostHint">Add Description</string>
+    <string name="newPostActivity_btn_postBlog_text">Post Blog</string>
+    <string name="mainActivity_bottomNavigationView_home">Home</string>
+    <string name="mainActivity_bottomNavigationView_navigation">Notification</string>
+    <string name="mainActivity_bottomNavigationView_notification">Notification</string>
+    <string name="mainActivity_bottomNavigationView_account">Account</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="blog_list_item_tv_username_value">UserName</string>
+    <string name="blog_list_item_tv_post_date_value">Blog Post Date</string>
+    <string name="blog_list_item_iv_postimage_description">This is post Image</string>
+    <string name="comment_activity_et_comment_text_hint">Please,Enter your comment here:</string>
+    <string name="blog_list_item_btn_delete_text">Delete Post</string>
+</resources>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/mainActivity_bottomNavigationView_home"
+        android:enabled="true"
+        android:icon="@drawable/mainactivity_bottomview_home_icon"
+        android:title="@string/mainActivity_bottomNavigationView_home"/>
+    <item
+        android:id="@+id/mainActivity_bottomNavigationView_notification"
+        android:enabled="true"
+        android:icon="@drawable/mainactivity_bottomview_notification_icon"
+        android:title="@string/mainActivity_bottomNavigationView_notification"/>
+    <item
+        android:id="@+id/mainActivity_bottomNavigationView_account"
+        android:enabled="true"
+        android:icon="@drawable/mainactivity_bottomview_person_icon"
+        android:title="@string/mainActivity_bottomNavigationView_account"/>
+</menu>

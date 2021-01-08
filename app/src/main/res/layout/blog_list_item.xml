@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:padding="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/nested_constraint_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:layout_editor_absoluteX="179dp"
+            tools:layout_editor_absoluteY="6dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/blog_list_item_circleImageView"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/mainactivity_bottomview_person_icon"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/blog_list_item_tv_username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="32dp"
+                android:text="@string/blog_list_item_tv_username_value"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/blog_list_item_circleImageView"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/blog_list_item_tv_post_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="4dp"
+                android:text="@string/blog_list_item_tv_post_date_value"
+                app:layout_constraintStart_toEndOf="@+id/blog_list_item_circleImageView"
+                app:layout_constraintTop_toBottomOf="@+id/blog_list_item_tv_username" />
+
+            <ImageView
+                android:id="@+id/blog_list_item_iv_postImage"
+                android:layout_width="0dp"
+                android:layout_height="200dp"
+                android:layout_marginTop="8dp"
+                android:contentDescription="@string/blog_list_item_iv_postimage_description"
+                android:scaleType="centerCrop"
+                android:src="@drawable/default_image"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/blog_list_item_circleImageView" />
+
+            <TextView
+                android:id="@+id/blog_list_item_tv_post_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/blog_list_item_iv_postImage"
+                tools:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s," />
+
+            <ImageView
+                android:id="@+id/blog_list_item_iv_blog_like"
+                android:layout_width="30dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/blog_list_item_tv_post_text"
+                app:layout_constraintVertical_bias="0.0"
+                app:srcCompat="@drawable/blog_list_item_grey_like_icon" />
+
+            <TextView
+                android:id="@+id/blog_list_item_tv_blog_like_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="0  Likes"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/blog_list_item_iv_blog_like"
+                app:layout_constraintTop_toBottomOf="@+id/blog_list_item_tv_post_text"
+                app:layout_constraintVertical_bias="0.488" />
+
+            <ImageView
+                android:id="@+id/blog_list_item_iv_comment"
+                android:layout_width="30dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/blog_list_item_tv_comment_count"
+                app:layout_constraintTop_toBottomOf="@+id/blog_list_item_tv_post_text"
+                app:layout_constraintVertical_bias="0.0"
+                app:srcCompat="@drawable/blog_list_item_comment_icon" />
+
+            <TextView
+                android:id="@+id/blog_list_item_tv_comment_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                android:text="0  comments"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/blog_list_item_tv_post_text" />
+
+            <ImageView
+                android:id="@+id/blog_list_item_iv_delete_btn1"
+                android:layout_width="40dp"
+                android:layout_height="80dp"
+                android:layout_marginEnd="6dp"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toTopOf="@+id/blog_list_item_iv_postImage"
+                app:layout_constraintEnd_toEndOf="parent"
+
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1.0"
+                app:srcCompat="@drawable/blog_list_item_delete_icon" />
+
+            <!--            <Button-->
+            <!--                android:id="@+id/blog_list_item_btn_delete"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginTop="8dp"-->
+            <!--                android:layout_marginEnd="8dp"-->
+            <!--                android:layout_marginBottom="8dp"-->
+
+            <!--                android:background="@android:color/darker_gray"-->
+            <!--                android:textColor="@android:color/white"-->
+            <!--                android:enabled="false"-->
+            <!--                android:text="@string/blog_list_item_btn_delete_text"-->
+            <!--                android:textAllCaps="false"-->
+            <!--                android:visibility="invisible"-->
+            <!--                app:layout_constraintBottom_toTopOf="@+id/blog_list_item_iv_postImage"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintTop_toTopOf="parent" />-->
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

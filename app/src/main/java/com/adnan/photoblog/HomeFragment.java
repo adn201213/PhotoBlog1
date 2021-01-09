@@ -116,21 +116,14 @@ public class HomeFragment extends Fragment {
         blog_list = new ArrayList<>();
         user_list = new ArrayList<>();
         //      String user_id=FirebaseAuth.getInstance().getCurrentUser().getUid();
-
         blogPostAdapter = new BlogPostAdapter(blog_list, user_list);
-blog_post_recyclerView.setHasFixedSize(true);
-
+        blog_post_recyclerView.setHasFixedSize(true);
         blog_post_recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         blog_post_recyclerView.setAdapter(blogPostAdapter);
         textViewCommentsCount1=container.findViewById(R.id.blog_list_item_tv_comment_count);
         firebaseAuth=FirebaseAuth.getInstance();
        currentUserId=firebaseAuth.getCurrentUser().getUid();
         //Set Description Text
-
-
-
-
-
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
 
             @Override

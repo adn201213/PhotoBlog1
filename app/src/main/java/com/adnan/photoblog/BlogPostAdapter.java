@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
@@ -31,6 +32,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -47,17 +51,24 @@ import com.google.firebase.firestore.WriteBatch;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class BlogPostAdapter extends RecyclerView.Adapter<BlogPostAdapter.BlogPostViewHolder> {
 
     private List<BlogPost> blog_list;
+    private List<User> user_list1;
     private List<User> user_list;
     private Context context;
     private FirebaseFirestore firebaseFirestore;
@@ -68,7 +79,6 @@ public class BlogPostAdapter extends RecyclerView.Adapter<BlogPostAdapter.BlogPo
     public BlogPostAdapter(List<BlogPost> blog_list,List<User> user_list){
         this.blog_list=blog_list;
         this.user_list=user_list;
-
      }
 
     public void setBlog_list(List<BlogPost> blog_list) {
@@ -92,7 +102,6 @@ public class BlogPostAdapter extends RecyclerView.Adapter<BlogPostAdapter.BlogPo
     @Override
     public void onBindViewHolder(@NonNull BlogPostViewHolder holder, int position) {
             holder.setIsRecyclable(false);
-
       String blogPostId=blog_list.get(position).BlogPostId;
 holder.updateCommentCount(blogPostId);
 
@@ -253,12 +262,14 @@ holder.imageViewCommentsBtn.setOnClickListener(new View.OnClickListener() {
 
 
     public class BlogPostViewHolder extends RecyclerView.ViewHolder{
+
      private View mView;
      private TextView textViewDesc;
         private TextView textViewUserName;
         private TextView blogDate;
     private ImageView imageViewPostImage;
      private CircleImageView blogImageView;
+        private ImageView testImage;
 private Context context;
      //likes and text view
         private ImageView likesImageViewBtn;
@@ -279,6 +290,9 @@ private Context context;
            imageViewCommentsBtn=mView.findViewById(R.id.blog_list_item_iv_comment);
            textViewComment=mView.findViewById(R.id.blog_list_item_tv_comment_count);
            blogDeleteButton=mView.findViewById(R.id.blog_list_item_iv_delete_btn1);
+           testImage=mView.findViewById(R.id.blog_list_item_iv_comment);
+
+
        }
        public void setDescText(String desc){
            textViewDesc=mView.findViewById(R.id.blog_list_item_tv_post_text);
@@ -390,58 +404,127 @@ private Context context;
 //display notification
 public void displayNotification(String userName,String image) throws IOException {
 
-if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
+    user_list1 = new ArrayList<>();
+    getListUser();
 
-    NotificationChannel notificationChannel=new NotificationChannel(CHANNEL_ID, "channel Display Name", NotificationManager.IMPORTANCE_DEFAULT);
-    notificationChannel.setDescription("This is blog channel");
-    NotificationManager notificationManager= context.getSystemService(NotificationManager.class);
-    notificationManager.createNotificationChannel(notificationChannel);
-}
-//    NotificationCompat.Builder notificationBuilder=
-//            new NotificationCompat.Builder(this,NOTIFICATION_CHANNEL_ID);
-//NotificationFragment.
-     Uri uri= Uri.parse(image);
-   Log.i(TAG, "displayNotification: " +uri);
- // Bitmap bitmap = MediaStore.Images.Media.getBitmap( context.getContentResolver(), uri);
-//    Log.i(TAG, "displayNotification: " +bitmap);
-  Bitmap bitmap=decodeUriToBitmap(context,uri);
-   Log.i(TAG, "displayNotification: " +bitmap);
+
+    if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
+
+        NotificationChannel notificationChannel=new NotificationChannel(CHANNEL_ID, "channel Display Name", NotificationManager.IMPORTANCE_DEFAULT);
+        notificationChannel.setDescription("This is blog channel");
+        NotificationManager notificationManager= context.getSystemService(NotificationManager.class);
+        notificationManager.createNotificationChannel(notificationChannel);
+    }
     Intent intent=new Intent(context,MainActivity.class);
     PendingIntent pendingIntent=PendingIntent.getActivity(context, 0, intent, 0);
 
-    NotificationCompat.Builder builder=new  NotificationCompat.Builder(context,CHANNEL_ID);
-                    builder.setSmallIcon(R.drawable.blog_list_item_notification)
-                    .setContentTitle(userName)
-                        .setLargeIcon(bitmap)
-                    .setContentText(userName +" likes your post")
+    String currentUserId=firebaseAuth.getCurrentUser().getUid();
 
-                    .setPriority(NotificationCompat.PRIORITY_HIGH)
-                            .setContentIntent(pendingIntent)
-                    .setStyle(new NotificationCompat.BigTextStyle().bigText("mydata"))
-                    .addAction(R.drawable.blog_list_item_notification,"Replay",pendingIntent);
-                    NotificationManagerCompat notificationManager=NotificationManagerCompat.from(context);
 
-    notificationManager.notify(10, builder.build());
+
+    firebaseFirestore.collection("usersPhotoBlog").document(currentUserId).get()
+            .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        if (task.getResult().exists()) {
+                            String name = task.getResult().getString("name");
+                            String image = task.getResult().getString("image");
+
+
+                            Glide.with(context)
+                                    .asBitmap()
+                                    .load(image)
+                                    .into(new CustomTarget<Bitmap>() {
+                                        @Override
+                                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+
+                                            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID);
+                                            builder.setSmallIcon(R.drawable.blog_list_item_notification)
+                                                    .setContentTitle(name)
+                                                    .setLargeIcon(resource)
+                                                    .setContentText( name +" likes your post"+userName )
+                                                    //  .setLargeIcon(bitmap)
+                                                    //    .addPerson(user.getImage())
+                                                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                                                    .setContentIntent(pendingIntent)
+                                                    // .setStyle(new NotificationCompat.BigTextStyle().bigText("mydata"))
+                                                    //   .setStyle(
+                                                    //   new NotificationCompat.BigPictureStyle().bigPicture(resource))
+                                                    .addAction(R.drawable.blog_list_item_notification, "Replay", pendingIntent);
+                                            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+
+                                            notificationManager.notify(10, builder.build());
+                                            Log.i(TAG, "onComplete:image "+image);
+                                            Log.i(TAG, "onComplete:image "+resource);
+
+                                        }
+
+                                        @Override
+                                        public void onLoadCleared(@Nullable Drawable placeholder) { }
+                                    });
+                        }
+                    } else {
+                        String error = task.getException().getMessage();
+
+                    }
+
+                }
+            });
+
+
+
 
 }
 
-    }
+}
 
-    public static Bitmap decodeUriToBitmap(Context mContext, Uri sendUri) {
-        Bitmap getBitmap = null;
-        try {
-            InputStream image_stream;
-            try {
-                image_stream = mContext.getContentResolver().openInputStream(sendUri);
-                getBitmap = BitmapFactory.decodeStream(image_stream);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
+
+
+
+    private void getListUser() {
+
+        firebaseFirestore.collection("usersPhotoBlog").get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot documentSnapshots) {
+                        if (documentSnapshots.isEmpty()) {
+                            Log.d(TAG, "onSuccess: LIST EMPTY");
+                            return;
+                        } else {
+                            // Convert the whole Query Snapshot to a list
+                            // of objects directly! No need to fetch each
+                            // document.
+
+                            List<User> userss = documentSnapshots.toObjects(User.class);
+                            Log.i(TAG, "onSuccess:size "+userss.size());
+                            Log.i(TAG, "onSuccess:array "+userss);
+
+                            user_list1.addAll(userss);
+                            Log.i(TAG, "onSuccess:arrray1 "+ user_list1.get(1));
+                        }
+                        }
+                    }) .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.i(TAG, "onFailure::user_list " +e.getMessage());
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return getBitmap;
-    }
-    
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                }
    
 }
